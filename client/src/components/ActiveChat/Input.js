@@ -21,9 +21,15 @@ const Input = (props) => {
   const classes = useStyles();
   const [text, setText] = useState("");
   const { postMessage, otherUser, conversationId, user } = props;
+  const messages = document.getElementById("messages");
 
   const handleChange = (event) => {
     setText(event.target.value);
+  };
+
+  const handleAutoScroll = () => {
+    const isAtBottom = (messages.scrollTop + messages.clientHeight) === messages.scrollHeight;
+    if (!isAtBottom) messages.scrollTop = messages.scrollHeight;
   };
 
   const handleSubmit = async (event) => {
@@ -36,6 +42,7 @@ const Input = (props) => {
       sender: conversationId ? null : user
     };
     await postMessage(reqBody);
+    setTimeout(handleAutoScroll, 200);
     setText("");
   };
 
