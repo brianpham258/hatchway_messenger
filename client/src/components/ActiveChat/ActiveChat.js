@@ -16,11 +16,6 @@ const useStyles = makeStyles(() => ({
     display: "flex",
     flexDirection: "column",
     flexGrow: 1,
-  },
-  inputContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    flexGrow: 1,
   }
 }));
 
@@ -59,7 +54,7 @@ const ActiveChat = (props) => {
               userId={user.id}
             />
           </Box>
-          <Box className={classes.inputContainer}>
+          <Box>
             <Input
               otherUser={conversation.otherUser}
               conversationId={conversation.id}
