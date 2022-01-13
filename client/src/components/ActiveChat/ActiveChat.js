@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box } from "@material-ui/core";
 import { Input, Header, Messages } from "./index";
@@ -29,6 +29,21 @@ const ActiveChat = (props) => {
   const { user } = props;
   const conversation = props.conversation || {};
 
+  const sortedMessages = useMemo(() => {
+    let copiedMessages = conversation.messages || [];
+    const arrLength = copiedMessages.length;
+    for (let i = 0; i < arrLength; i++) {
+      for (let j = 0; j < arrLength - i - 1; j++) {
+        if (copiedMessages[j].createdAt > copiedMessages[j+1].createdAt) {
+          const temp = copiedMessages[j];
+          copiedMessages[j] = copiedMessages[j+1];
+          copiedMessages[j+1] = temp;
+        }
+      }
+    }
+    return copiedMessages;
+  }, [conversation.messages]);
+
   return (
     <Box className={classes.root}>
       {conversation.otherUser && (
@@ -39,7 +54,7 @@ const ActiveChat = (props) => {
           />
           <Box className={classes.chatContainer}>
             <Messages
-              messages={conversation.messages}
+              messages={sortedMessages}
               otherUser={conversation.otherUser}
               userId={user.id}
             />
