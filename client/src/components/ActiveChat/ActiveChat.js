@@ -42,7 +42,7 @@ const ActiveChat = (props) => {
       }
     }
     return copiedMessages;
-  }, [conversation.messages]);
+  }, [conversation.id]);
 
   return (
     <Box className={classes.root}>
