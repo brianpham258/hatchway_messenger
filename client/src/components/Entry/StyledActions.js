@@ -1,33 +1,35 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Grid, Typography, Button } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 
-const StyledCreateButton = styled(Button)`
-  margin-left: 4%;
-  padding: 10px 30px;
-  box-shadow: 0 2px 12px rgba(74, 106, 149, 0.2);
-`;
-
-const StyledActionsWrapper = styled(Grid)`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  width: auto;
-`;
+const useStyles = makeStyles(() => ({
+  createButton: {
+    marginLeft: '4%',
+    padding: '10px 30px',
+    boxShadow: '0 2px 12px rgba(74, 106, 149, 0.2)'
+  },
+  actionsWrapper: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    width: 'auto'
+  }
+}));
 
 const StyledActions = ({ question, btnLabel, btnUrl }) => {
   const history = useHistory();
+  const classes = useStyles();
 
   return (
-    <StyledActionsWrapper container item>
+    <Grid className={classes.actionsWrapper} container item>
       <Typography color="secondary">{question}</Typography>
 
-      <StyledCreateButton size="large" onClick={() => history.push(btnUrl)}>
+      <Button className={classes.createButton} size="large" onClick={() => history.push(btnUrl)}>
         <Typography color="primary">{btnLabel}</Typography>
-      </StyledCreateButton>
-    </StyledActionsWrapper>
+      </Button>
+    </Grid>
   );
 };
 

@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
 import {
   Grid,
   Button,
@@ -8,18 +7,22 @@ import {
   TextField,
   FormHelperText,
 } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 
-const StyledButtonWrapper = styled(Grid)`
-  width: 100%;
-  text-align: center;
-  margin-top: 40px;
-`;
-
-const StyledButton = styled(Button)`
-  padding: 15px 50px;
-`;
+const useStyles = makeStyles(() => ({
+  buttonWrapper: {
+    width: '100%',
+    textAlign: 'center',
+    marginTop: 40,
+  },
+  button: {
+    padding: '15px 50px'
+  }
+}));
 
 const EntryForm = ({ fields, btnLabel, onSubmit }) => {
+  const classes = useStyles();
+
   return (
     <form onSubmit={onSubmit}>
       <Grid>
@@ -44,16 +47,17 @@ const EntryForm = ({ fields, btnLabel, onSubmit }) => {
           </FormControl>
         ))}
 
-        <StyledButtonWrapper>
-          <StyledButton
+        <Grid className={classes.buttonWrapper}>
+          <Button
+            className={classes.button}
             type="submit"
             variant="contained"
             color="primary"
             size="large"
           >
             {btnLabel}
-          </StyledButton>
-        </StyledButtonWrapper>
+          </Button>
+        </Grid>
       </Grid>
     </form>
   );
