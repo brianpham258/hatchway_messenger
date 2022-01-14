@@ -6,8 +6,9 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(() => ({
   chatBox: {
-    height: 'calc(100vh - 300px)',
-    overflowY: 'auto'
+    height: 'calc(100vh - 250px)',
+    overflowY: 'auto',
+    paddingBottom: 10
   }
 }));
 
@@ -21,7 +22,7 @@ const Messages = (props) => {
         const time = moment(message.createdAt).format("h:mm");
 
         return message.senderId === userId ? (
-          <SenderBubble key={message.id} text={message.text} time={time} />
+          <SenderBubble key={message.id} attachments={message.attachments} text={message.text} time={time} />
         ) : (
           <OtherUserBubble key={message.id} text={message.text} time={time} otherUser={otherUser} />
         );
