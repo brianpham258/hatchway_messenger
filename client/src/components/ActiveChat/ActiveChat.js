@@ -39,13 +39,11 @@ const ActiveChat = (props) => {
               userId={user.id}
             />
           </Box>
-          <Box>
-            <Input
-              otherUser={conversation.otherUser}
-              conversationId={conversation.id}
-              user={user}
-            />
-          </Box>
+          <Input
+            otherUser={conversation.otherUser}
+            conversationId={conversation.id}
+            user={user}
+          />
         </>
       )}
     </Box>
