@@ -28,7 +28,6 @@ const theme = createTheme({
 
 const useStyles = makeStyles((theme) => ({
   createButton: {
-    // marginLeft: 30,
     boxShadow: "0 2px 12px rgba(74, 106, 149, 0.2)",
     borderRadius: 5,
     width: 170,
