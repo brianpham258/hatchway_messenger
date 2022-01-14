@@ -7,6 +7,7 @@ import {
   setSearchedUsers,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
+import { ascendingSort } from '../../core/utlis';
 
 axios.interceptors.request.use(async function (config) {
   const token = await localStorage.getItem("messenger-token");
@@ -72,15 +73,19 @@ export const logout = (id) => async (dispatch) => {
 export const fetchConversations = () => async (dispatch) => {
   try {
     const { data } = await axios.get("/api/conversations");
-    dispatch(gotConversations(data));
+    const sortedData = data.map((item) => {
+      const sortedMessage = ascendingSort(item.messages);
+      item.messages = sortedMessage;
+      return item;
+    });
+    dispatch(gotConversations(sortedData));
   } catch (error) {
     console.error(error);
   }
 };
 
 const saveMessage = async (body) => {
-  const { data } = await axios.post("/api/messages", body);
-  return data;
+  return await axios.post("/api/messages", body);
 };
 
 const sendMessage = (data, body) => {
@@ -93,9 +98,9 @@ const sendMessage = (data, body) => {
 
 // message format to send: {recipientId, text, conversationId}
 // conversationId will be set to null if its a brand new conversation
-export const postMessage = (body) => (dispatch) => {
+export const postMessage = (body) => async (dispatch) => {
   try {
-    const data = saveMessage(body);
+    const { data } = await saveMessage(body);
     if (!body.conversationId) {
       dispatch(addConversation(body.recipientId, data.message));
     } else {
