@@ -1,13 +1,19 @@
 import React from "react";
 import { Redirect, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
+import {
+  FormControl,
+  TextField,
+} from "@material-ui/core";
 
 import EntryLayout from "./EntryLayout";
 import EntryForm from "./EntryForm";
 import StyledActions from "./StyledActions";
 import { login } from "../../store/utils/thunkCreators";
+import { useEntryFormControlStyles } from './constant';
 
 const Login = (props) => {
+  const classes = useEntryFormControlStyles();
   const history = useHistory();
   const { user, login } = props;
 
@@ -32,26 +38,34 @@ const Login = (props) => {
     />
   );
 
-  const fields = [
-    {
-      type: "text",
-      label: "E-mail address",
-      ariaLabel: "username",
-      name: "username",
-      required: true,
-    },
-    {
-      type: "password",
-      label: "Password",
-      ariaLabel: "password",
-      name: "password",
-      required: true,
-    },
-  ];
-
   return (
     <EntryLayout title="Welcome back!" actions={actions}>
-      <EntryForm fields={fields} btnLabel="Login" onSubmit={handleLogin} />
+      <EntryForm btnLabel="Login" onSubmit={handleLogin}>
+        <FormControl
+          className={classes.formControl}
+          margin="normal"
+          required
+        >
+          <TextField
+            label="E-mail address"
+            aria-label="username"
+            name="username"
+            type="text"
+          />
+        </FormControl>
+        <FormControl
+          className={classes.formControl}
+          margin="normal"
+          required
+        >
+          <TextField
+            label="Password"
+            aria-label="password"
+            name="password"
+            type="password"
+          />
+        </FormControl>
+      </EntryForm>
     </EntryLayout>
   );
 };

@@ -1,80 +1,59 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { Grid, Button } from "@material-ui/core";
 import {
-  Grid,
-  Button,
-  FormControl,
-  TextField,
-  FormHelperText,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+  makeStyles,
+  createTheme,
+  ThemeProvider,
+} from "@material-ui/core/styles";
+
+const theme = createTheme({
+  typography: {
+    button: {
+      fontSize: '16px !important',
+      textTransform: "capitalize",
+    },
+  },
+  palette: {
+    primary: { main: "#3A8DFF" },
+    secondary: { main: "#B0B0B0" }
+  }
+});
 
 const useStyles = makeStyles(() => ({
   buttonWrapper: {
-    width: '100%',
-    textAlign: 'center',
+    width: "100%",
+    textAlign: "center",
     marginTop: 40,
   },
   button: {
-    padding: '15px 50px'
-  }
+    padding: "18px 60px",
+  },
 }));
 
-const EntryForm = ({ fields, btnLabel, onSubmit }) => {
+const EntryForm = ({ children, btnLabel, onSubmit }) => {
   const classes = useStyles();
 
   return (
-    <form onSubmit={onSubmit}>
-      <Grid>
-        {fields.map((field) => (
-          <FormControl
-            style={{ width: "100%", marginBottom: 10 }}
-            margin="normal"
-            required={field.required}
-          >
-            <TextField
-              label={field.label}
-              aria-label={field.ariaLabel}
-              name={field.name}
-              type={field.type}
-              {...field.controlProps}
-            />
-            {field.error && (
-              <FormHelperText>
-                {field.helperText}
-              </FormHelperText>
-            )}
-          </FormControl>
-        ))}
+    <ThemeProvider theme={theme}>
+      <form onSubmit={onSubmit}>
+        <Grid>
+          {children}
 
-        <Grid className={classes.buttonWrapper}>
-          <Button
-            className={classes.button}
-            type="submit"
-            variant="contained"
-            color="primary"
-            size="large"
-          >
-            {btnLabel}
-          </Button>
+          <Grid className={classes.buttonWrapper}>
+            <Button
+              className={classes.button}
+              type="submit"
+              variant="contained"
+              color="primary"
+              size="large"
+            >
+              {btnLabel}
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
-    </form>
+      </form>
+    </ThemeProvider>
   );
-};
-
-EntryForm.propTypes = {
-  btnLabel: PropTypes.string,
-  fields: PropTypes.array,
-
-  onSubmit: PropTypes.func,
-};
-
-EntryForm.defaultProps = {
-  btnLabel: "Submit",
-  fields: [],
-
-  onSubmit: () => {},
 };
 
 export default EntryForm;
