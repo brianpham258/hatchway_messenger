@@ -9,16 +9,16 @@ import ImageUploader from "./ImageUploader";
 const useStyles = makeStyles(() => ({
   root: {
     justifySelf: "flex-end",
-    marginTop: 15,
+    marginTop: 15
   },
   input: {
     height: 70,
     backgroundColor: "#F4F6FA",
     borderRadius: 8,
-    marginBottom: 20,
+    marginBottom: 20
   },
   inputContainer: {
-    alignItems: "center",
+    alignItems: "center"
   },
 }));
 
