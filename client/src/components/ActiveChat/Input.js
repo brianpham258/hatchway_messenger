@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { FormControl, FilledInput, Grid, Box } from "@material-ui/core";
+import { FormControl, FilledInput, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
+import axios from "axios";
 
 import { postMessage } from "../../store/utils/thunkCreators";
 import ImageUploader from "./ImageUploader";
@@ -9,16 +10,22 @@ import ImageUploader from "./ImageUploader";
 const useStyles = makeStyles(() => ({
   root: {
     justifySelf: "flex-end",
-    marginTop: 15
+    marginTop: 15,
   },
   input: {
     height: 70,
     backgroundColor: "#F4F6FA",
     borderRadius: 8,
-    marginBottom: 20
+    marginBottom: 20,
+    width: "100%",
   },
   inputContainer: {
-    alignItems: "center"
+    alignItems: "center",
+  },
+  inputWrapper: {
+    position: "relative",
+    display: "inline-block",
+    width: "100%",
   },
 }));
 
@@ -40,9 +47,9 @@ const Input = (props) => {
     inputImages.map(async (image) => {
       const formData = new FormData();
       formData.append("file", image);
-      formData.append("upload_preset", "messenger");
-      formData.append("cloud_name", "da0gms6qh");
-      formData.append("api_key", "323412189623755");
+      formData.append("upload_preset", `${process.env.REACT_APP_UPLOAD_PRESET}`);
+      formData.append("cloud_name", `${process.env.REACT_APP_CLOUD_NAME}`);
+      formData.append("api_key", `${process.env.REACT_APP_API_KEY}`);
 
       fetch("https://api.cloudinary.com/v1_1/da0gms6qh/image/upload", {
         method: "post",
@@ -54,8 +61,6 @@ const Input = (props) => {
           setImages(imageList);
         });
     });
-
-    event.target.value = null;
   };
 
   const handleAutoScroll = () => {
@@ -82,26 +87,20 @@ const Input = (props) => {
 
   return (
     <form className={classes.root} onSubmit={handleSubmit}>
-      <Grid className={classes.inputContainer} container>
-        {images.length > 0 && <Box>Uploaded {images.length} images</Box>}
-        <Grid item xs={11}>
-          <FormControl fullWidth hiddenLabel>
-            <FilledInput
-              classes={{ root: classes.input }}
-              disableUnderline
-              placeholder="Type something..."
-              value={text}
-              name="text"
-              onChange={handleChange}
-            />
-          </FormControl>
-        </Grid>
-        <Grid item xs={1}>
-          <FormControl fullWidth hiddenLabel>
-            <ImageUploader onChange={handleOnImageUpload} />
-          </FormControl>
-        </Grid>
-      </Grid>
+      {images.length > 0 && <Box>Uploaded {images.length} images</Box>}
+      <FormControl fullWidth hiddenLabel>
+        <Box className={classes.inputWrapper}>
+          <FilledInput
+            classes={{ root: classes.input }}
+            disableUnderline
+            placeholder="Type something..."
+            value={text}
+            name="text"
+            onChange={handleChange}
+          />
+          <ImageUploader onChange={handleOnImageUpload} />
+        </Box>
+      </FormControl>
     </form>
   );
 };
