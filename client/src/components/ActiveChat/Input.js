@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { FormControl, FilledInput, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import axios from "axios";
 
 import { postMessage } from "../../store/utils/thunkCreators";
 import ImageUploader from "./ImageUploader";
@@ -33,8 +32,7 @@ const Input = (props) => {
   const classes = useStyles();
   const [text, setText] = useState("");
   const [images, setImages] = useState([]);
-  const { postMessage, otherUser, conversationId, user } = props;
-  const messages = document.getElementById("messages");
+  const { postMessage, otherUser, conversationId, user, onScroll } = props;
 
   const handleChange = (event) => {
     setText(event.target.value);
@@ -42,31 +40,28 @@ const Input = (props) => {
 
   const handleOnImageUpload = (event) => {
     const inputImages = Array.from(event.target.files);
-    let imageList = images;
 
-    inputImages.map(async (image) => {
-      const formData = new FormData();
-      formData.append("file", image);
-      formData.append("upload_preset", `${process.env.REACT_APP_UPLOAD_PRESET}`);
-      formData.append("cloud_name", `${process.env.REACT_APP_CLOUD_NAME}`);
-      formData.append("api_key", `${process.env.REACT_APP_API_KEY}`);
+    Promise.all(
+      inputImages.map((image) => {
+        const formData = new FormData();
+        formData.append("file", image);
+        formData.append(
+          "upload_preset",
+          `${process.env.REACT_APP_UPLOAD_PRESET}`
+        );
+        formData.append("cloud_name", `${process.env.REACT_APP_CLOUD_NAME}`);
+        formData.append("api_key", `${process.env.REACT_APP_API_KEY}`);
 
-      fetch("https://api.cloudinary.com/v1_1/da0gms6qh/image/upload", {
-        method: "post",
-        body: formData,
-      })
-        .then((resp) => resp.json())
-        .then((data) => {
-          imageList = imageList.concat([data]);
-          setImages(imageList);
+        return fetch("https://api.cloudinary.com/v1_1/da0gms6qh/image/upload", {
+          method: "post",
+          body: formData,
         });
+      })
+    ).then((responses) => {
+      Promise.all(responses.map((res) => res.json())).then((data) => {
+        setImages(data);
+      });
     });
-  };
-
-  const handleAutoScroll = () => {
-    const isAtBottom =
-      messages.scrollTop + messages.clientHeight === messages.scrollHeight;
-    if (!isAtBottom) messages.scrollTop = messages.scrollHeight;
   };
 
   const handleSubmit = async (event) => {
@@ -80,7 +75,7 @@ const Input = (props) => {
       sender: conversationId ? null : user,
     };
     await postMessage(reqBody);
-    setTimeout(handleAutoScroll, 200);
+    onScroll();
     setText("");
     setImages([]);
   };

@@ -1,9 +1,9 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import { Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(() => ({
-  uplodaerWrapper: {
+  uploaderWrapper: {
     position: "absolute",
     right: 15,
     top: 25,
@@ -23,7 +23,7 @@ const useStyles = makeStyles(() => ({
 const ImageUploader = ({ onChange }) => {
   const classes = useStyles();
   return (
-    <Box className={classes.uplodaerWrapper}>
+    <Box className={classes.uploaderWrapper}>
       <label>
         <input
           className={classes.input}
